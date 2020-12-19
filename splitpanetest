@@ -1,0 +1,65 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package splitpanetest;
+import java.awt.Color;
+import java.awt.GridLayout;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import javax.swing.*;
+
+public class SplitPaneTest extends JFrame
+{
+	private static final long serialVersionUID = 1L;
+        ImageIcon icon1 = new ImageIcon("images/1.jpg");
+        ImageIcon icon2 = new ImageIcon("images/2.jpg");
+	private JLabel laurellabel;
+        private JLabel cefirolabel;
+	private int    dividerMain = 500;
+	private final  String TEMPL_lbl = "dividerLocation = %d";
+        private JLabel listener;
+        private JLabel listener2;
+	public SplitPaneTest()
+	{
+		super("Пример разделяемой панели JSplitPane");
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		final JSplitPane splitHorizontal = new JSplitPane();
+		splitHorizontal.setOneTouchExpandable(true);
+		splitHorizontal.setDividerSize(10);
+		splitHorizontal.setDividerLocation(500);               
+                laurellabel = new JLabel("Nissan Laurel",SwingConstants.CENTER);
+                cefirolabel = new JLabel("Nissan Cefiro",SwingConstants.CENTER);
+                listener = new JLabel(String.format(TEMPL_lbl,dividerMain),SwingConstants.CENTER);
+                listener2 = new JLabel(String.format(TEMPL_lbl,dividerMain),SwingConstants.CENTER);
+                
+		JPanel panel1 = new JPanel();
+                panel1.setLayout(new GridLayout(3,0,0,0));
+                panel1.add(new JLabel(icon1));
+                panel1.add(laurellabel);
+                panel1.add(listener);
+                
+                JPanel panel2 = new JPanel();
+                panel2.setLayout(new GridLayout(3,0,0,0));
+                panel2.add(new JLabel(icon2));
+                panel2.add(cefirolabel);
+                panel2.add(listener2);
+                
+		splitHorizontal.setLeftComponent(new JScrollPane(panel1));
+		splitHorizontal.setRightComponent(new JScrollPane(panel2));
+		splitHorizontal.addPropertyChangeListener(new PropertyChangeListener()
+		{
+			@Override
+			public void propertyChange(PropertyChangeEvent arg0)
+			{
+				dividerMain = splitHorizontal.getDividerLocation();
+                                listener.setText(String.format(TEMPL_lbl, dividerMain));
+                                listener2.setText(String.format(TEMPL_lbl, dividerMain));
+			}
+		});
+		getContentPane().add(splitHorizontal);
+		setSize(1000, 400);
+               	setVisible(true);
+        }
+}
